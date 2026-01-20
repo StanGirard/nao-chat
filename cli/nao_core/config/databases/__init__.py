@@ -4,6 +4,9 @@ from pydantic import Discriminator, Tag
 
 from .base import AccessorType, DatabaseConfig, DatabaseType
 from .bigquery import BigQueryConfig
+from .databricks import DatabricksConfig
+from .duckdb import DuckDBConfig
+from .snowflake import SnowflakeConfig
 from .postgres import PostgresConfig
 
 # =============================================================================
@@ -13,6 +16,9 @@ from .postgres import PostgresConfig
 AnyDatabaseConfig = Annotated[
     Union[
         Annotated[BigQueryConfig, Tag("bigquery")],
+        Annotated[DatabricksConfig, Tag("databricks")],
+        Annotated[SnowflakeConfig, Tag("snowflake")],
+        Annotated[DuckDBConfig, Tag("duckdb")],
         Annotated[PostgresConfig, Tag("postgres")],
     ],
     Discriminator("type"),
@@ -24,10 +30,25 @@ def parse_database_config(data: dict) -> DatabaseConfig:
     db_type = data.get("type")
     if db_type == "bigquery":
         return BigQueryConfig.model_validate(data)
+    elif db_type == "duckdb":
+        return DuckDBConfig.model_validate(data)
+    elif db_type == "databricks":
+        return DatabricksConfig.model_validate(data)
+    elif db_type == "snowflake":
+        return SnowflakeConfig.model_validate(data)
     elif db_type == "postgres":
         return PostgresConfig.model_validate(data)
     else:
         raise ValueError(f"Unknown database type: {db_type}")
 
 
-__all__ = ["AccessorType", "DatabaseConfig", "DatabaseType", "BigQueryConfig", "PostgresConfig", "AnyDatabaseConfig"]
+__all__ = [
+    "AccessorType",
+    "AnyDatabaseConfig",
+    "BigQueryConfig", "PostgresConfig",
+    "DuckDBConfig",
+    "DatabaseConfig",
+    "DatabaseType",
+    "DatabricksConfig",
+    "SnowflakeConfig",
+]

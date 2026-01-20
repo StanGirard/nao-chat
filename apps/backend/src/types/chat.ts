@@ -15,7 +15,7 @@ export interface UIChat {
 	title: string;
 	createdAt: number;
 	updatedAt: number;
-	messages: unknown[];
+	messages: UIMessage[];
 }
 
 export interface ListChatResponse {
@@ -32,6 +32,7 @@ export interface ChatListItem {
 export type UIMessage = UIGenericMessage<unknown, MessageCustomDataParts, UITools> & {
 	feedback?: MessageFeedback;
 };
+
 export type UITools = InferUITools<typeof tools>;
 
 /** Additional data parts that are not part of the ai sdk data parts */
@@ -45,7 +46,9 @@ export type UIMessagePart = UIGenericMessagePart<MessageCustomDataParts, UITools
 /** Tools that are statically defined in the code (e.g. built-in tools) */
 export type UIStaticToolPart = ToolUIPartType<UITools>;
 
-export type StaticToolName = `tool-${keyof UITools}`;
+export type StaticToolName = keyof UITools;
+
+export type UIStaticToolCallPartType = `tool-${StaticToolName}`;
 
 /** Either a static or dynamic tool part (e.g. MCP tools) */
 export type UIToolPart = UIStaticToolPart | DynamicToolUIPart;
@@ -55,3 +58,14 @@ export type ToolState = UIToolPart['state'];
 export type UIMessagePartType = UIMessagePart['type'];
 
 export type StopReason = FinishReason | 'interrupted';
+
+export type TokenUsage = {
+	inputTotalTokens?: number;
+	inputNoCacheTokens?: number;
+	inputCacheReadTokens?: number;
+	inputCacheWriteTokens?: number;
+	outputTotalTokens?: number;
+	outputTextTokens?: number;
+	outputReasoningTokens?: number;
+	totalTokens?: number;
+};

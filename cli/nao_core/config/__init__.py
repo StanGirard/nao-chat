@@ -1,5 +1,14 @@
 from .base import NaoConfig
-from .databases import AccessorType, AnyDatabaseConfig, BigQueryConfig, DatabaseType, PostgresConfig
+from .databases import (
+    AccessorType,
+    AnyDatabaseConfig,
+    BigQueryConfig,
+    DatabaseType,
+    DatabricksConfig,
+    DuckDBConfig,
+    SnowflakeConfig,
+)
+from .exceptions import InitError, PostgresConfig
 from .llm import LLMConfig, LLMProvider
 from .slack import SlackConfig
 
@@ -8,9 +17,13 @@ __all__ = [
     "AccessorType",
     "AnyDatabaseConfig",
     "BigQueryConfig",
+    "DuckDBConfig",
+    "DatabricksConfig",
+    "SnowflakeConfig",
     "DatabaseType",
     "LLMConfig",
     "LLMProvider",
     "PostgresConfig",
     "SlackConfig",
+    "InitError",
 ]
